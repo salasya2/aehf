@@ -37,7 +37,7 @@ jobs:
             pip install mypy
             mypy src
       
-      - name: Run MyPy (Unit Tests)
+      - name: Run pytest (Unit Tests)
         run:  |
               pip install pytest
               pytest 
