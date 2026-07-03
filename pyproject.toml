@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aehf"
+description = "agent evaluation harness framework"
+version = "2026.7.0"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">= 3.11"
+dependencies = [
+    "pydantic >= 2.7",
+    "pyyaml",
+    "typer"
+]
+
+
+[tool.ruff]
+
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E" , "F", "I","UP"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+
+python_version = "3.13"
+strict = true
+
+
+
