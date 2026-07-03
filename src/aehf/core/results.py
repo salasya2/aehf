@@ -1,11 +1,11 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict
-from datetime import timedelta
+from pydantic import BaseModel
+
 from aehf.core.transcript import Transcript
+
 
 class Verdict(BaseModel):
     passed : bool
-    score: Optional[float]
+    score: float | None = None
     reasoning: str
     judge_name: str
     version: str
@@ -13,10 +13,10 @@ class Verdict(BaseModel):
 class CaseResult(BaseModel):
     case_id : int
     transcript : Transcript
-    verdicts: List[Verdict]
-    run_metadata: Dict
+    verdicts: list[Verdict]
+    run_metadata: dict[str,str]
 
 class SuiteResult(BaseModel):
     suite_name: str
-    results: List[CaseResult]
+    results: list[CaseResult]
     run_id: str

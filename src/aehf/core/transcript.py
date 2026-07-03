@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field,field_validator
-from typing import Optional, List, Union,Dict
 from datetime import datetime
 from enum import Enum
+
+from pydantic import BaseModel, Field, field_validator
+
 
 class Termination(Enum):
     finished = 1
@@ -11,7 +12,7 @@ class Termination(Enum):
 
 class ToolCall(BaseModel):
     toolname: str
-    arguments: List[str]
+    arguments: list[str]
     result: str
     error_flag: str
     latency: int
@@ -19,17 +20,13 @@ class ToolCall(BaseModel):
 class Step(BaseModel):
 
     model_output:str
-    tool_calls: Union[List[ToolCall],None]
+    tool_calls: list[ToolCall] | None=None
     token_usage: float= Field(..., description ="Token Usage")
 
 class Transcript(BaseModel):
     id: int
-    ordered_steps: List[Step]
+    ordered_steps: list[Step]
     final_answer: str
     total_tokens: int
-    wall_clock_time: Optional[datetime] = Field(default=None)
-    @field_validator("wall_clock_time",mode = "before")
-    def set_at(cls,v:Optional[datetime]) -> datetime:
-
-        return v or datetime.now()
+    wall_clock_time: datetime = Field(default_factory=datetime.now)
     termination_reason: Termination
