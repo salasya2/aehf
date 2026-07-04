@@ -14,7 +14,12 @@ dependencies = [
     "pyyaml",
     "typer"
 ]
-
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest"
+]
 
 [tool.ruff]
 

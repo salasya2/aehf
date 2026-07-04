@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import timedelta
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -12,21 +13,21 @@ class Termination(Enum):
 
 class ToolCall(BaseModel):
     toolname: str
-    arguments: list[str]
+    arguments: dict[str,Any]
     result: str
-    error_flag: str
-    latency: int
+    error_flag: str | None =None
+    latency: float
 
 class Step(BaseModel):
 
     model_output:str
     tool_calls: list[ToolCall] | None=None
-    token_usage: float= Field(..., description ="Token Usage")
+    token_usage: int= Field(..., description ="Token Usage")
 
 class Transcript(BaseModel):
     id: int
     ordered_steps: list[Step]
     final_answer: str
     total_tokens: int
-    wall_clock_time: datetime = Field(default_factory=datetime.now)
+    wall_clock_time: timedelta = Field(default_factory=timedelta)
     termination_reason: Termination

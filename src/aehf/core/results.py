@@ -4,6 +4,7 @@ from aehf.core.transcript import Transcript
 
 
 class Verdict(BaseModel):
+
     passed : bool
     score: float | None = None
     reasoning: str
