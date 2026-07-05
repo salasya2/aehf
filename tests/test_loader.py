@@ -11,8 +11,8 @@ def test_emptypath() -> None:
 
 def test_valid() -> None:
     demo_path = Path(__file__).resolve().parents[1] / "examples" / "demo.yaml"
-    assert load_suite(path = demo_path)
-
+    case = load_suite(path = demo_path)
+    assert case.eval[0].tools[0].name == "calculator"
 def test_emptyfile() -> None:
     with pytest.raises(SuiteLoadError):
         load_suite(path = Path(__file__).parent / "empty.yaml")

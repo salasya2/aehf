@@ -19,6 +19,7 @@ dev = [
     "ruff",
     "mypy",
     "pytest",
+    "pytest-asyncio",
     "types-PyYAML"
 ]
 
@@ -40,5 +41,8 @@ indent-style = "space"
 python_version = "3.13"
 strict = true
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
 
-
+[project.scripts]
+aehf = "aehf.cli:app"

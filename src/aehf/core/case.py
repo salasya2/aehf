@@ -1,16 +1,18 @@
 from datetime import timedelta
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ToolSpec(BaseModel):
+    model_config = ConfigDict(frozen=True)
     name: str
     description: str | None = None
     parameters: dict[str,Any] = Field(default_factory = dict[str,Any])
 
 class EvalCase(BaseModel):
-    id: int
+    model_config = ConfigDict(frozen=True)
+    id: str
     task_prompt: str
     tools : list[ToolSpec]
     success_criteria: dict[str,Any]
@@ -20,5 +22,6 @@ class EvalCase(BaseModel):
     tags: str | None = None
 
 class Suite(BaseModel):
+    model_config = ConfigDict(frozen=True)
     name: str
     eval: list[EvalCase]

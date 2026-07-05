@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from aehf.core.transcript import Transcript
 
 
 class Verdict(BaseModel):
-
+    model_config = ConfigDict(frozen=True)
     passed : bool
     score: float | None = None
     reasoning: str
@@ -12,12 +12,14 @@ class Verdict(BaseModel):
     version: str
 
 class CaseResult(BaseModel):
-    case_id : int
+    model_config = ConfigDict(frozen=True)
+    case_id : str
     transcript : Transcript
     verdicts: list[Verdict]
     run_metadata: dict[str,str]
 
 class SuiteResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
     suite_name: str
     results: list[CaseResult]
     run_id: str

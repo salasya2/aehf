@@ -21,7 +21,7 @@ TOOLCALL = ToolCall(
 )
 
 TRANSCRIPT = Transcript(
-    id=1,
+    id="1",
     ordered_steps=[
         Step(model_output="calling calculator", tool_calls=[TOOLCALL], token_usage=75),
         Step(model_output="the answer is 6", tool_calls=None, token_usage=25),
@@ -33,7 +33,7 @@ TRANSCRIPT = Transcript(
 )
 
 EVALCASE = EvalCase(
-    id=1,
+    id="1",
     task_prompt="What is 2*3?",
     tools=[
         ToolSpec(
@@ -73,7 +73,7 @@ def test_case_models_roundtrip() -> None:
 
 def test_results_models_roundtrip() -> None:
     result = CaseResult(
-        case_id=1,
+        case_id="1",
         transcript=TRANSCRIPT,
         verdicts=[VERDICT],
         run_metadata={"model": "claude-haiku-4-5", "git_sha": "abc123"},

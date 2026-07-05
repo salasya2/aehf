@@ -13,6 +13,9 @@ belongs to CaseResult metadata, not the transcript.
 
 3. Using Protocol instead of ABC 
 **Decision**: using Protocol instead of ABC
-**Why**: With ABC, every class must import aehf package and have to inherit the required classes. Their Code is coupled to the package.
+**Why**: With ABC, every class must import aehf package and have to inherit the required classes. Their Code is coupled to the package. 
 But with protocol the classes don't have to inherit, they just have to implement with matching function name. A matching function name in someone else's code having no idea about our package will still pass the check.
+Eg:- Base agent is defined in base.py and fakeagent  satisfies the Agent without inheritance or registration. 
+
 **Rejected**: ABC — code coupled to the package and inheritance hierarchy.
+

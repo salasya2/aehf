@@ -2,16 +2,18 @@ from datetime import timedelta
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Termination(Enum):
-    finished = 1
-    max_steps = 2
-    timeout = 3
-    crashed= 4
+    finished = "finished"
+    max_steps = "max_steps"
+    timeout = "timeout"
+    crashed= "crashed"
+    budget_exceeded = "budget_exceeded"
 
 class ToolCall(BaseModel):
+    model_config = ConfigDict(frozen=True)
     toolname: str
     arguments: dict[str,Any]
     result: str
@@ -19,13 +21,14 @@ class ToolCall(BaseModel):
     latency: float
 
 class Step(BaseModel):
-
+    model_config = ConfigDict(frozen=True)
     model_output:str
     tool_calls: list[ToolCall] | None=None
     token_usage: int= Field(..., description ="Token Usage")
 
 class Transcript(BaseModel):
-    id: int
+    model_config = ConfigDict(frozen=True)
+    id: str
     ordered_steps: list[Step]
     final_answer: str
     total_tokens: int

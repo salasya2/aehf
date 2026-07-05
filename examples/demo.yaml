@@ -1,6 +1,6 @@
 name: demo
 eval:
-  - id: 1
+  - id: "1"
     task_prompt: "What is 2*3?"
     tools:
       - name: calculator
