@@ -18,7 +18,8 @@ dependencies = [
 dev = [
     "ruff",
     "mypy",
-    "pytest"
+    "pytest",
+    "types-PyYAML"
 ]
 
 [tool.ruff]

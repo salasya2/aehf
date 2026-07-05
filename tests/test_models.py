@@ -28,7 +28,7 @@ TRANSCRIPT = Transcript(
     ],
     final_answer="6",
     total_tokens=100,
-    wall_clock_time=timedelta(seconds=12.5),
+    duration_seconds=timedelta(seconds=12.5),
     termination_reason=Termination.finished,
 )
 

@@ -1,0 +1,15 @@
+name: demo
+
+    task_prompt: "What is 2*3?"
+    tools:
+      - name: calculator
+        description: "Evaluates arithmetic"
+        parameters:
+          type: object
+          properties:
+            expression: {type: string}
+    success_criteria:
+      answer_regex: "6"
+    max_steps: 5
+    timeout_seconds: 30
+    token_budget: 1000

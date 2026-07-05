@@ -29,5 +29,5 @@ class Transcript(BaseModel):
     ordered_steps: list[Step]
     final_answer: str
     total_tokens: int
-    wall_clock_time: timedelta = Field(default_factory=timedelta)
+    duration_seconds: timedelta 
     termination_reason: Termination
