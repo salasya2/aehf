@@ -1,5 +1,4 @@
 import asyncio
-from datetime import timedelta
 
 import pytest
 
@@ -7,7 +6,7 @@ from aehf.adapters.fake import FakeAgent
 from aehf.core.case import EvalCase
 from tests.slowagent import SlowAgent
 
-case = EvalCase(id = "2", task_prompt = "hi", tools = [],success_criteria = {"acc":90},max_steps = 1,timeout_seconds  = timedelta(10),token_budget = 10)
+case = EvalCase(id = "2", task_prompt = "hi", tools = [],success_criteria = {"acc":90},max_steps = 1,timeout_seconds  = 10,token_budget = 10)
 
 async def test_fakeagent() -> None:
     fakeAgent = FakeAgent({})

@@ -1,7 +1,6 @@
 import asyncio
 import time
 import traceback
-from datetime import timedelta
 from typing import Any
 from uuid import uuid4
 
@@ -15,16 +14,20 @@ async def run_case(agent: Agent, case:EvalCase) -> CaseResult:
     run_metadata : dict[str,Any] = {}
     start_time = time.monotonic()
     try:
-        transcript = await asyncio.wait_for(agent.run(case),timeout = case.timeout_seconds.total_seconds())
-        if transcript.total_tokens >case.token_budget:
-            transcript = transcript.model_copy(update ={"duration_seconds":timedelta(seconds = time.monotonic()-start_time) ,"termination_reason" : Termination.budget_exceeded})
+        transcript = await asyncio.wait_for(agent.run(case),timeout = case.timeout_seconds)
+        duration =  time.monotonic()-start_time
+        transcript = transcript.model_copy(update = {"duration_seconds" : duration})
+        if len(transcript.ordered_steps) > case.max_steps and transcript.total_tokens >case.token_budget:
+            transcript = transcript.model_copy(update ={"termination_reason" : Termination.budget_and_steps_exceeded})
+        elif transcript.total_tokens >case.token_budget:
+            transcript = transcript.model_copy(update ={"termination_reason" : Termination.budget_exceeded})
 
-        if len(transcript.ordered_steps) > case.max_steps:
-            transcript = transcript.model_copy(update ={"duration_seconds": timedelta(seconds = time.monotonic()-start_time), "termination_reason" :Termination.max_steps})
+        elif len(transcript.ordered_steps) > case.max_steps:
+            transcript = transcript.model_copy(update ={"termination_reason" :Termination.max_steps})
     except TimeoutError:
-        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = timedelta(seconds = time.monotonic()-start_time),termination_reason = Termination.timeout)
+        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic()-start_time,termination_reason = Termination.timeout)
     except Exception as exc:
-        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = timedelta(seconds = time.monotonic() - start_time),termination_reason = Termination.crashed)
+        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic() - start_time,termination_reason = Termination.crashed)
         run_metadata['error_type'] = type(exc).__name__
         run_metadata['error_message'] = str(exc)
         run_metadata['error_traceback'] = traceback.format_exc()

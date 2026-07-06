@@ -1,4 +1,3 @@
-from datetime import timedelta
 
 from pydantic import BaseModel
 
@@ -28,7 +27,7 @@ TRANSCRIPT = Transcript(
     ],
     final_answer="6",
     total_tokens=100,
-    duration_seconds=timedelta(seconds=12.5),
+    duration_seconds=12.5,
     termination_reason=Termination.finished,
 )
 
@@ -48,7 +47,7 @@ EVALCASE = EvalCase(
     ],
     success_criteria={"answer_regex": "6"},
     max_steps=5,
-    timeout_seconds=timedelta(seconds=30),
+    timeout_seconds=20,
     token_budget=1000,
 )
 

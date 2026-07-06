@@ -5,9 +5,8 @@
 **Rejected**:  aehf venv confuses the gitignore with the actual dir
 
 2. storing timestamp vs duration
-**Decision:** `duration_seconds: timedelta` instead of `wall_clock_time: datetime`.
-**Why:** Runner needs elapsed time to enforce budgets; when the run happened
-belongs to CaseResult metadata, not the transcript.
+**Decision:** `duration_seconds: float` instead of `wall_clock_time: datetime`.
+**Why:** Runner needs elapsed time to enforce budgets; when the run happened belongs to CaseResult metadata, not the transcript. Also using timedelta resulted in several inconsistencies like timedelta(10) refers to 10 days instead of 10 seconds. So to keep everything consistent, I went ahead with float.
 **Rejected:** datetime field — conflates "when" with "how long".
 
 

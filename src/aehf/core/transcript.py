@@ -1,4 +1,4 @@
-from datetime import timedelta
+
 from enum import Enum
 from typing import Any
 
@@ -11,6 +11,7 @@ class Termination(Enum):
     timeout = "timeout"
     crashed= "crashed"
     budget_exceeded = "budget_exceeded"
+    budget_and_steps_exceeded = "budget_and_steps_exceeded"
 
 class ToolCall(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -32,5 +33,5 @@ class Transcript(BaseModel):
     ordered_steps: list[Step]
     final_answer: str
     total_tokens: int
-    duration_seconds: timedelta 
+    duration_seconds: float 
     termination_reason: Termination

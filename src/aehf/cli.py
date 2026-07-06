@@ -1,5 +1,4 @@
 import asyncio
-from datetime import timedelta
 from pathlib import Path
 
 import typer
@@ -27,7 +26,7 @@ def demo_transcripts(suite: Suite) -> dict[str, Transcript]:
             ],
             final_answer="demo answer",
             total_tokens=10 * n_steps,
-            duration_seconds=timedelta(seconds=0.1),
+            duration_seconds=0.1,
             termination_reason=Termination.finished,
         )
     return transcripts
@@ -43,14 +42,23 @@ def run(path:Path, concurrency:int = 5) -> None:
     except SuiteLoadError as e:
         print(e)
         raise typer.Exit(2)
+    except FileNotFoundError as e:
+        print(e)
+        raise typer.Exit(2)
     except Exception as e:
         print(e)
         raise typer.Exit(1)
+    failed = [r for r in suiteresult.results if r.transcript.termination_reason != Termination.finished]
+    print(f"{len(suiteresult.results)} cases: {len(suiteresult.results) - len(failed)} completed, {len(failed)} failed")
+    
+        
 
     print(f"{'id':<12} {'reason':<16} {'steps':>5} {'tokens':>7} {'secs':>6}")
     for r in suiteresult.results:
         t = r.transcript
-        print(f"{r.case_id:<12} {t.termination_reason.value:<16} {len(t.ordered_steps):>5} {t.total_tokens:>7} {t.duration_seconds.total_seconds():>6.2f}")
-
+        
+        print(f"{r.case_id:<12} {t.termination_reason.value:<16} {len(t.ordered_steps):>5} {t.total_tokens:>7} {t.duration_seconds:>6.2f}")
+    if failed:
+        raise typer.Exit(1)
 if __name__== "__main__":
     app()

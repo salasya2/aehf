@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -17,7 +16,7 @@ class EvalCase(BaseModel):
     tools : list[ToolSpec]
     success_criteria: dict[str,Any]
     max_steps: int = Field(..., description = "Maximum Number of Steps")
-    timeout_seconds: timedelta = Field(..., description = "Time out Seconds") 
+    timeout_seconds: float = Field(..., description = "Time out Seconds") 
     token_budget: int = Field(..., description = "Token Budget")
     tags: str | None = None
 

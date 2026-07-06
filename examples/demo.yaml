@@ -14,3 +14,33 @@ eval:
     max_steps: 5
     timeout_seconds: 30
     token_budget: 1000
+  
+  - id: "2"
+    task_prompt: "What is 4*3?"
+    tools:
+      - name: calculator
+        description: "Evaluates arithmetic"
+        parameters:
+          type: object
+          properties:
+            expression: {type: string}
+    success_criteria:
+      answer_regex: "12"
+    max_steps: 5
+    timeout_seconds: 30
+    token_budget: 1000
+
+  - id: "3"
+    task_prompt: "What is 5*3?"
+    tools:
+      - name: calculator
+        description: "Evaluates arithmetic"
+        parameters:
+          type: object
+          properties:
+            expression: {type: string}
+    success_criteria:
+      answer_regex: "15"
+    max_steps: 5
+    timeout_seconds: 30
+    token_budget: 1000
