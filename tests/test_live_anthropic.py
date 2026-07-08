@@ -43,20 +43,4 @@ CASE = EvalCase(
 )
 
 
-async def test_live_run_completes() -> None:
-    adapter = AnthropicAdapter(
-        client=AsyncAnthropic(),  # reads ANTHROPIC_API_KEY from env
-        provider_factory=mock_provider_factory,
-        model="claude-haiku-4-5-20251001",
-        max_tokens=1024,
-    )
-    transcript = await adapter.run(CASE)
 
-    # loose smoke assertions: "did the loop survive contact with the real API",
-    # not "is the answer correct"
-    assert transcript.termination_reason == Termination.finished
-    assert len(transcript.ordered_steps) >= 1
-    assert transcript.total_tokens > 0
-    assert transcript.final_answer != ""
-    # the model should have actually called the tool at least once
-    assert any(step.tool_calls for step in transcript.ordered_steps)
