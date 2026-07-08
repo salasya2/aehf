@@ -6,13 +6,15 @@ Run locally with:  pytest tests/test_live_anthropic.py -v
 import os
 
 import pytest
-from anthropic import AsyncAnthropic
+
+# from anthropic import AsyncAnthropic
 from dotenv import load_dotenv
 
-from aehf.adapters.anthropic import AnthropicAdapter
+# from aehf.adapters.anthropic import AnthropicAdapter
 from aehf.core.case import EvalCase, ToolSpec
-from aehf.core.transcript import Termination
-from aehf.tools.mock import mock_provider_factory
+
+# from aehf.core.transcript import Termination
+# from aehf.tools.mock import mock_provider_factory
 
 load_dotenv()
 
