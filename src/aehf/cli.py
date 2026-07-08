@@ -50,14 +50,15 @@ def build_agent(agent: AgentChoice, tools : ToolChoice, recordings_dir:Path, mod
 @app.command()
 def run(path: Path, agent : AgentChoice, tools: ToolChoice,  concurrency: int = 5, max_tokens : int = 1024, recordings_dir : Path = Path("output/"), model : str = "claude-haiku-4-5-20251001") ->None:
     load_dotenv()
-    adapter = build_agent(agent,tools,recordings_dir,model,max_tokens)
-
+    # validate the cheapest, most local input first: a bad suite should report
+    # itself even when no API key is set
     try:
         suite = load_suite(path)
     except (SuiteLoadError, FileNotFoundError) as e:
         print(e)
         raise typer.Exit(2)
 
+    adapter = build_agent(agent,tools,recordings_dir,model,max_tokens)
     suite_result = asyncio.run(run_suite(adapter,suite,concurrency))
     
     failed = [r for r in suite_result.results if r.transcript.termination_reason != Termination.finished]
