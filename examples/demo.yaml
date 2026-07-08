@@ -13,7 +13,9 @@ eval:
       answer_regex: "6"
     max_steps: 5
     timeout_seconds: 30
-    token_budget: 1000
+    token_budget: 10000
+    tool_fixtures:
+      calculator : "6"
   
   - id: "2"
     task_prompt: "What is 4*3?"
@@ -28,7 +30,9 @@ eval:
       answer_regex: "12"
     max_steps: 5
     timeout_seconds: 30
-    token_budget: 1000
+    token_budget: 10000
+    tool_fixtures:
+      calculator: "1"
 
   - id: "3"
     task_prompt: "What is 5*3?"
@@ -43,4 +47,6 @@ eval:
       answer_regex: "15"
     max_steps: 5
     timeout_seconds: 30
-    token_budget: 1000
+    token_budget: 10000
+    tool_fixtures:
+      calculator : "15"

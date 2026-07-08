@@ -11,6 +11,9 @@ eval:
             expression: {type: string}
     success_criteria:
       answer_regex: "6"
-    max_steps: 5
-    timeout_seconds: 30
-    token_budget: 1000
+    max_steps: 10
+    timeout_seconds: 300
+    token_budget: 10000
+    tool_fixtures:
+      calculator : "6"
+    

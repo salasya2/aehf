@@ -8,6 +8,7 @@ class ToolSpec(BaseModel):
     name: str
     description: str | None = None
     parameters: dict[str,Any] = Field(default_factory = dict[str,Any])
+    
 
 class EvalCase(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -19,6 +20,7 @@ class EvalCase(BaseModel):
     timeout_seconds: float = Field(..., description = "Time out Seconds") 
     token_budget: int = Field(..., description = "Token Budget")
     tags: str | None = None
+    tool_fixtures: dict[str,str] | None = None
 
 class Suite(BaseModel):
     model_config = ConfigDict(frozen=True)

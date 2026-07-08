@@ -17,6 +17,7 @@ TOOLCALL = ToolCall(
     result="6",
     error_flag=None,
     latency=203.5,
+    
 )
 
 TRANSCRIPT = Transcript(
@@ -43,12 +44,14 @@ EVALCASE = EvalCase(
                 "properties": {"expression": {"type": "string"}},
                 "required": ["expression"],
             },
+            
         )
     ],
     success_criteria={"answer_regex": "6"},
     max_steps=5,
     timeout_seconds=20,
     token_budget=1000,
+    tool_fixtures = {'search' : "hekko"},
 )
 
 VERDICT = Verdict(

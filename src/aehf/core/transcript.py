@@ -10,6 +10,8 @@ class Termination(Enum):
     max_steps = "max_steps"
     timeout = "timeout"
     crashed= "crashed"
+    refused = "refused"
+    unexpected_stop = "unexpected_stop"
     budget_exceeded = "budget_exceeded"
     budget_and_steps_exceeded = "budget_and_steps_exceeded"
 
