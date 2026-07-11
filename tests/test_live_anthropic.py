@@ -10,7 +10,7 @@ from anthropic import AsyncAnthropic
 from dotenv import load_dotenv
 
 from aehf.adapters.anthropic import AnthropicAdapter
-from aehf.core.case import EvalCase, ToolSpec
+from aehf.core.case import EvalCase, SuccessCriteria, ToolSpec
 from aehf.core.transcript import Termination
 from aehf.tools.mock import mock_provider_factory
 
@@ -35,7 +35,7 @@ CASE = EvalCase(
             },
         )
     ],
-    success_criteria={"answer_regex": "68"},
+    success_criteria=SuccessCriteria(answer_regex = "6",required_tools = ["calculator"],forbidden_tools = []),
     max_steps=5,
     timeout_seconds=60,
     token_budget=5000,

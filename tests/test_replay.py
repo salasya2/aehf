@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from aehf.core.case import EvalCase, ToolSpec
+from aehf.core.case import EvalCase, SuccessCriteria, ToolSpec
 from aehf.tools.mock import MockToolProvider, mock_provider_factory
 from aehf.tools.replay import (
     ReplayMissError,
@@ -25,7 +25,7 @@ EVALCASE = EvalCase(
             },
         )
     ],
-    success_criteria={"answer_regex": "6"},
+    success_criteria=SuccessCriteria(answer_regex = "6",required_tools = ["calculator"],forbidden_tools = []),
     max_steps=5,
     timeout_seconds=20,
     token_budget=1000,

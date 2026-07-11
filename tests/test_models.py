@@ -1,7 +1,7 @@
 
 from pydantic import BaseModel
 
-from aehf.core.case import EvalCase, Suite, ToolSpec
+from aehf.core.case import EvalCase, SuccessCriteria, Suite, ToolSpec
 from aehf.core.results import CaseResult, SuiteResult, Verdict
 from aehf.core.transcript import Step, Termination, ToolCall, Transcript
 
@@ -47,7 +47,7 @@ EVALCASE = EvalCase(
             
         )
     ],
-    success_criteria={"answer_regex": "6"},
+    success_criteria=SuccessCriteria(answer_regex = "6",required_tools = ["calculator"],forbidden_tools = []),
     max_steps=5,
     timeout_seconds=20,
     token_budget=1000,

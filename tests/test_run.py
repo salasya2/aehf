@@ -2,12 +2,12 @@ import asyncio
 from pathlib import Path
 
 from aehf.adapters.fake import FakeAgent
-from aehf.core.case import EvalCase
+from aehf.core.case import EvalCase, SuccessCriteria
 from aehf.core.loader import load_suite
 from aehf.core.runner import run_suite
 from aehf.core.transcript import Termination
 
-case = EvalCase(id = "2", task_prompt = "hi", tools = [],success_criteria = {"acc":90},max_steps = 1,timeout_seconds  = 0.05,token_budget = 10,tool_fixtures = {'search' : "hekko"})
+case = EvalCase(id = "2", task_prompt = "hi", tools = [],success_criteria = SuccessCriteria(answer_regex = "5", required_tools = ["calculator"],forbidden_tools = []),max_steps = 1,timeout_seconds  = 0.05,token_budget = 10,tool_fixtures = {'search' : "hekko"})
 
 # def test_happy() -> None:
 #     suite = load_suite(Path(__file__).resolve().parents[1] / "examples" / "demo.yaml")

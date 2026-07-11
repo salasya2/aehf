@@ -39,3 +39,15 @@ Eg:- Base agent is defined in base.py and fakeagent  satisfies the Agent without
 **Why:** Full determinism would require recording model responses too, keyed by conversation state — real engineering, out of scope for v0.1. Consequence: with the deterministic mock as the inner provider, record→replay is byte-identical; with argument-sensitive real tools (Phase 6), model drift can cause replay misses on a healthy suite. Mitigate with temperature=0 and tolerant success criteria.
 **Rejected:** recording model responses in v0.1 — too much scope for the milestone.
 
+8. Design choice sync vs async — judge scoring
+**Context:**  We have two judges one which runs without API on CPU(`AssertionJudge`), the other uses API (`LLMJudge`).
+**Decision:** Chose async for score method 
+**Why:** The real driver is uniformity: the runner and the calibration loop call await judge.score(...) without knowing or branching on which judge they hold. The cost async imposes on the CPU-only judge is trivial; the cost sync imposes on the API-bound judge is real (serialized calls). So I make the whole protocol async — same reasoning as ToolProvider.execute, which I made async even though the mock doesn't need it.
+**con:** Async is infectious — once score is async, everything up the call stack is async too. You're accepting that spread in exchange for a uniform interface.
+**Rejected:** Rejected the sync for the score method in judge protocol.
+
+9. Who Runs Judge
+**Decision:** A seperate class to run the judges.
+**Why:** Some we need to rerun judges, putting it into run suite will cause running the agent again which is expensive.
+**Rejected:** Calling Judge in run_suite
+ 

@@ -25,9 +25,9 @@ async def run_case(agent: Agent, case:EvalCase) -> CaseResult:
         elif len(transcript.ordered_steps) > case.max_steps:
             transcript = transcript.model_copy(update ={"termination_reason" :Termination.max_steps})
     except TimeoutError:
-        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic()-start_time,termination_reason = Termination.timeout)
+        transcript = Transcript(id = case.id,ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic()-start_time,termination_reason = Termination.timeout)
     except Exception as exc:
-        transcript = Transcript(id = "-1",ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic() - start_time,termination_reason = Termination.crashed)
+        transcript = Transcript(id = case.id,ordered_steps = [], final_answer ="",total_tokens= -1,duration_seconds = time.monotonic() - start_time,termination_reason = Termination.crashed)
         run_metadata['error_type'] = type(exc).__name__
         run_metadata['error_message'] = str(exc)
         run_metadata['error_traceback'] = traceback.format_exc()
@@ -46,6 +46,6 @@ async def run_suite(agent:Agent, suite:Suite, max_concurrency :int = 5) -> Suite
     
     suiteresult = SuiteResult(suite_name = suite.name, results = result,run_id = uuid4().hex[:8])
     return suiteresult
-    
+ 
 
 

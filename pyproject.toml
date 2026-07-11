@@ -15,6 +15,7 @@ dependencies = [
     "pyyaml",
     "typer",
     "python-dotenv",
+    "statsmodels",
     
 ]
 [project.optional-dependencies]
