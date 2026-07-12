@@ -1,4 +1,5 @@
- ![demo](docs/demo.gif)
+![demo](https://raw.githubusercontent.com/salasya2/aehf/main/docs/demo.gif)
+
 # aehf — agent evaluation harness framework
 
 
