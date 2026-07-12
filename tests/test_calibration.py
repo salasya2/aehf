@@ -2,12 +2,16 @@ from pathlib import Path
 
 import pytest
 
-from aehf.core.case import EvalCase, SuccessCriteria
+from aehf.core.case import EvalCase, SuccessCriteria, Suite
+from aehf.core.results import CaseResult, SuiteResult
 from aehf.core.transcript import Step, Termination, Transcript
+from aehf.core.transcript import Termination as _Term
+from aehf.core.transcript import Transcript as _T
 from aehf.judges.calibration import (
     LabeledTranscript,
     LabelLoadError,
     cohen_kappa,
+    export_unlabeled,
     load_labeled,
     save_labeled,
 )
@@ -106,3 +110,25 @@ def test_mismatched_lengths_raise() -> None:
 def test_empty_raises() -> None:
     with pytest.raises(ValueError):
         cohen_kappa([], [])
+
+
+def test_export_crashed_case_defaults_to_fail(tmp_path: Path) -> None:
+    # a case that crashed before judging has no verdicts; export must not
+    # IndexError on verdicts[0] — it provisionally labels it fail
+    case = EvalCase(
+        id="a", task_prompt="q", tools=[],
+        success_criteria=SuccessCriteria(rubric="x"),
+        max_steps=5, timeout_seconds=30, token_budget=1000,
+    )
+    transcript = _T(
+        id="a", ordered_steps=[], final_answer="", total_tokens=-1,
+        duration_seconds=0.1, termination_reason=_Term.crashed,
+    )
+    sr = SuiteResult(
+        suite_name="s",
+        results=[CaseResult(case_id="a", transcript=transcript, verdicts=[], run_metadata={})],
+        run_id="r1",
+    )
+    records = export_unlabeled(Suite(name="s", eval=[case]), sr)
+    assert len(records) == 1
+    assert records[0].human_label is False

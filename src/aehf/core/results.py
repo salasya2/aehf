@@ -31,4 +31,6 @@ def save_suite_result(result: SuiteResult, path: Path) -> None:
     path.write_text(result.model_dump_json(indent=2))
 def load_suite_result(path: Path) -> SuiteResult:
     return SuiteResult.model_validate_json(path.read_text())
-    
+
+def case_passed(cr: CaseResult) -> bool:
+    return bool(cr.verdicts) and cr.verdicts[0].passed

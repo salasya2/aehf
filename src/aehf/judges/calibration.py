@@ -3,7 +3,7 @@ from pathlib import Path
 from pydantic import BaseModel, ValidationError
 
 from aehf.core.case import EvalCase, Suite
-from aehf.core.results import SuiteResult
+from aehf.core.results import SuiteResult, case_passed
 from aehf.core.transcript import Transcript
 
 
@@ -16,6 +16,25 @@ class LabeledTranscript(BaseModel):
     transcript: Transcript
     human_label : bool
     note : str  = ""
+
+
+def render_for_label(record: LabeledTranscript) -> str:
+    # human-readable view for hand-labeling: the task, the rubric to judge
+    # against, then what the agent actually did
+    case = record.case
+    lines = [
+        f"case: {case.id}",
+        f"task: {case.task_prompt}",
+        f"rubric: {case.success_criteria.rubric or '(none)'}",
+        "-- transcript --",
+    ]
+    for i, step in enumerate(record.transcript.ordered_steps, start=1):
+        lines.append(f"  step {i}: {step.model_output}")
+        for tc in step.tool_calls or []:
+            lines.append(f"    tool {tc.toolname}({tc.arguments}) -> {tc.result}")
+    lines.append(f"final answer: {record.transcript.final_answer}")
+    lines.append(f"termination: {record.transcript.termination_reason.value}")
+    return "\n".join(lines)
 
 def load_labeled(path : Path) -> list[LabeledTranscript]:
     labeled_transcript : list[LabeledTranscript] = []
@@ -70,14 +89,14 @@ def export_unlabeled(suite: Suite, suite_result: SuiteResult) -> list[LabeledTra
 
     records : list[LabeledTranscript] = []
 
-    for i in range(len(case_results)):
-
-        id = case_results[i].case_id
-        transcript = case_results[i].transcript
-
-        case  = cases_by_id[id]
-
-        records.append(LabeledTranscript(case = case, transcript = transcript, human_label = case_results[i].verdicts[0].passed,note= "provisional:assertion"))
+    for cr in case_results:
+        case = cases_by_id[cr.case_id]
+        records.append(LabeledTranscript(
+            case=case,
+            transcript=cr.transcript,
+            human_label=case_passed(cr),  # provisional; unguarded verdicts[0] would crash on a crashed run
+            note="provisional:assertion",
+        ))
     return records
 
 

@@ -1,0 +1,40 @@
+name :  CI eval
+
+
+on:
+    push: 
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+permissions:
+    pull-requests: write
+
+jobs:
+    eval:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+            - uses: actions/setup-python@v6
+              with:
+                python-version: '3.13'
+                cache:  'pip'
+            - run: pip install -e ".[dev]"
+
+            - name: Regression diff
+              run: |
+                aehf diff "$BASE_SHA" "$HEAD_SHA" --store .aehf  --model "$MODEL" --judge_version v1 --out scorecard.md
+              
+              env: 
+                BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+                MODEL: claude-haiku-4-5-20251001
+
+            - name: Post scorecard
+                
+              if: always()                     
+              run: gh pr comment "$PR" --body-file scorecard.md
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                PR: ${{ github.event.pull_request.number }}
+

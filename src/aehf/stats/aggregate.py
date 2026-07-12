@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from aehf.core.results import CaseResult, SuiteResult
+from aehf.core.results import CaseResult, SuiteResult, case_passed
 from aehf.stats.sampling import wilson_interval
 
 
@@ -38,12 +38,7 @@ def aggregate(runs: list[SuiteResult]) -> list[CaseStats]:
     for case_id in case_results.keys():
         samples = case_results[case_id]
         n = len(samples)
-        passes = 0
-        for case in samples:
-            if not case.verdicts:
-                continue
-            if case.verdicts[0].passed:
-                passes += 1
+        passes = sum(case_passed(c) for c in samples)
         
         pass_rate = passes/n
         ci_low,ci_high = wilson_interval(passes,n)

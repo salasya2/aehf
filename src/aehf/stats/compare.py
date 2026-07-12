@@ -3,7 +3,7 @@ import math
 
 from pydantic import BaseModel
 
-from aehf.core.results import SuiteResult
+from aehf.core.results import SuiteResult, case_passed
 
 
 def mcnemar_test(b : int, c:int) -> float:
@@ -35,7 +35,7 @@ def compare_result(a: SuiteResult, b: SuiteResult) -> ComparisonResult:
     both_fail = 0
     a_only = 0
     b_only = 0
-    p_value = 0.0
+    
 
 
     
@@ -47,35 +47,18 @@ def compare_result(a: SuiteResult, b: SuiteResult) -> ComparisonResult:
         raise ValueError(f"Cases in {a.run_id} don't match that of {b.run_id}")
     
 
-    for id in a_by_id.keys():
-        n+=1
-        a_case = a_by_id[id]
-        b_case = b_by_id[id]
-        if not a_case.verdicts and not b_case.verdicts:
-            both_fail+=1
-                
-        elif not a_case.verdicts:
-            if not b_case.verdicts[0].passed:
-                both_fail+=1
-            if b_case.verdicts[0].passed:
-                b_passed+=1
-                b_only += 1
-        elif not b_case.verdicts:
-            if not a_case.verdicts[0].passed:
-                both_fail+=1
-            if a_case.verdicts[0].passed:
-                a_passed+=1
-                a_only += 1
-        elif a_case.verdicts[0].passed and b_case.verdicts[0].passed:
+    for case_id in a_by_id:
+        n += 1
+        a_pass = case_passed(a_by_id[case_id])
+        b_pass = case_passed(b_by_id[case_id])
+        a_passed += a_pass
+        b_passed += b_pass
+        if a_pass and b_pass:
             both_pass += 1
-            b_passed += 1
-            a_passed += 1
-        elif b_case.verdicts[0].passed:
-            b_passed+=1
-            b_only += 1
-        elif a_case.verdicts[0].passed:
-            a_passed += 1
+        elif a_pass:
             a_only += 1
+        elif b_pass:
+            b_only += 1
         else:
             both_fail += 1
 
