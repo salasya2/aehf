@@ -50,4 +50,34 @@ Eg:- Base agent is defined in base.py and fakeagent  satisfies the Agent without
 **Decision:** A seperate class to run the judges.
 **Why:** Some we need to rerun judges, putting it into run suite will cause running the agent again which is expensive.
 **Rejected:** Calling Judge in run_suite
+
+10. n-sampling lives in the CLI, not run_suite
+**Decision:** `run` loops `run_suite`/`judge_suite` n times; the runner still produces one CaseResult per case.
+**Why:** Threading `n` into run_suite would put n copies of each case id into a single SuiteResult, and judge_suite joins transcripts by case id in a dict — duplicate ids silently collapse. Keeping n at the CLI keeps the one-result-per-case contract that judge_suite's join and the CLI table depend on.
+**Rejected:** an `n_samples` parameter inside run_suite — breaks the id-keyed join downstream.
+
+11. Exact binomial McNemar, not chi-square
+**Decision:** McNemar's test uses the exact binomial form over discordant pairs, not the chi-square approximation.
+**Why:** The suite is small (18 cases -> often <10 discordant pairs), exactly where the chi-square approximation is unreliable. The exact test is also simpler in stdlib (`math.comb`), ~6 lines. Limitation: `compare` runs on single stored runs, so McNemar is n=1; the n=5 story lives in the aggregate table's pass rates + Wilson CIs.
+**Rejected:** chi-square McNemar — inaccurate at small discordant counts.
+
+12. Errors the agent can act on return strings; errors only the operator can fix raise
+**Decision:** MockToolProvider returns an error string for an unknown tool; ReplayToolProvider and the LLM judge raise on unrecoverable states. The regression store raises RunNotFoundError.
+**Why:** An unknown-tool call is agent behaviour worth evaluating (the agent can read the error and recover). A replay miss, a missing store key, or a malformed judge verdict are harness misconfiguration the model cannot fix — fail loud, don't corrupt the data with a fake verdict.
+**Rejected:** silent fallbacks (e.g. replay-miss -> live call) — turns deterministic/free into paid/flaky without warning.
+
+13. `cast` is a lie to the type checker at trust boundaries (bug post-mortem)
+**Decision:** Validate the shape of API/JSON responses at runtime; never rely on `cast` to make them safe.
+**Why:** `cast(dict, block.input)` type-checked green and passed every stub test, but a live Sonnet judge omitted the required `passed` field on an ambiguous case (it over-reasoned; stop_reason was tool_use, NOT truncation). `cast` does nothing at runtime, so the missing key surfaced as a cryptic KeyError deep in a 180-call batch. Fixed with a bounded 3x retry (LLM tool calls are stochastic; a fresh sample usually complies) plus a diagnostic error naming stop_reason and the partial dict.
+**Rejected:** trusting the "required" schema field to guarantee presence — forced tool_choice guarantees the tool is called, not that every field is populated.
+
+14. Use the judge you calibrated
+**Decision:** The Haiku vs Sonnet experiment judges with the Haiku v1 judge (the one measured at kappa 0.894), not a swapped-in stronger model.
+**Why:** Calibration earns trust in a *specific* instrument. Judging the experiment with an uncalibrated Sonnet judge would throw that away — and Sonnet is exactly the model that triggered the omitted-field bug. Holding the calibrated Haiku judge constant across both agent runs is both more rigorous and more robust.
+**Rejected:** judging with the strongest available model (Sonnet) — uncalibrated, and behaviourally flakier on this task.
+
+15. temperature is deprecated on Claude 5 — do not send it
+**Decision:** The LLM judge does not pass `temperature`.
+**Why:** The Claude 5 family (e.g. claude-sonnet-5) rejects `temperature` with an invalid_request_error. The kappa-0.894 run never sent it and was fine, so judge determinism relies on the model default, not a temperature knob.
+**Rejected:** `temperature=0` for determinism — rejected by the API on current models.
  

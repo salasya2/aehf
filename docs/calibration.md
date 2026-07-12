@@ -74,3 +74,56 @@ e.g.:
 aehf calibrate labels/labels_filled.jsonl assertion          # -> kappa 0.000
 aehf calibrate labels/labels_filled.jsonl llm --prompt-version v1   # -> kappa 0.894
 ```
+
+---
+
+# Second finding — Haiku vs Sonnet (using the calibrated judge)
+
+Having earned trust in the judge (kappa 0.894), we used it to answer an
+agent-performance question: does Sonnet beat Haiku on this suite? Both models
+ran the 18-case suite at n=5, judged by the **same calibrated Haiku v1 judge**
+held constant.
+
+| Model  | Passed (single run) | ~pass rate |
+|--------|---------------------|------------|
+| Haiku  | 15 / 18             | 83%        |
+| Sonnet | 14 / 18             | 78%        |
+
+**McNemar's paired test: p = 1.0 — not significant.** Only one case differed
+between the two models, so the apparent 15-vs-14 edge is statistical noise. A
+naive "bigger number wins" reading would have wrongly concluded Haiku is better;
+a single-run comparison would have misled. This is the reason the harness carries
+n-sampling and a paired significance test.
+
+## What the aggregate hides
+
+Per case, the two models did differ behaviorally on the hardest cases:
+
+- **hard-hedged-13** (rubric: commit to a specific number): Haiku 4/5, **Sonnet
+  0/5**. Sonnet consistently hedged where the task demanded commitment — the
+  stronger model was more cautious, and this task penalized caution.
+- **hard-hedged-13 / hard-vaguetool-14** were flagged **flaky** (intermediate
+  pass rates) — the agent is genuinely inconsistent on ambiguous cases, which a
+  single run would hide.
+
+## Honest caveat
+
+The suite is **saturated**: 14 of 18 cases pass 100% for both models, so it
+lacks the dynamic range to discriminate between them. Part of the finding is
+therefore "this suite cannot separate these models" — a harder suite would be
+needed to detect a difference if one exists. Reporting the non-significant result
+honestly is more credible than cherry-picking cases to manufacture a p < 0.05.
+
+## Reproduce
+
+```bash
+SHA=$(git rev-parse HEAD)
+aehf run examples/calibration_suite.yaml anthropic mock --n-samples 5 \
+  --judgechoice llm --model claude-haiku-4-5-20251001 \
+  --judge-model claude-haiku-4-5-20251001 --max-tokens 2048 --store .aehf
+aehf run examples/calibration_suite.yaml anthropic mock --n-samples 5 \
+  --judgechoice llm --model claude-sonnet-5 \
+  --judge-model claude-haiku-4-5-20251001 --max-tokens 2048 --store .aehf
+aehf compare ".aehf/$SHA/claude-haiku-4-5-20251001__v1.json" \
+             ".aehf/$SHA/claude-sonnet-5__v1.json"
+```
