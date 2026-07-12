@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "aehf"
 description = "agent evaluation harness framework"
-version = "0.1.0"
+version = "0.1.1"
 license = "MIT"
 readme = "README.MD"                    
 authors = [{ name = "Sai Teja Alasyam", email = "salasya2@asu.edu" }]
