@@ -3,7 +3,7 @@ from typing import Any, cast
 from anthropic import AsyncAnthropic
 from anthropic.types import ToolParam
 
-from aehf.core.case import EvalCase, SuccessCriteria
+from aehf.core.case import EvalCase
 from aehf.core.results import Verdict
 from aehf.core.transcript import Transcript
 
@@ -81,33 +81,40 @@ class LLMJudge:
         return res
 
     async def score(self, case: EvalCase, transcript: Transcript) -> Verdict:
-        
         agent_transcript = self.render_transcript(transcript)
-        success_criteria : SuccessCriteria = case.success_criteria
-        
-        if success_criteria is None:
-            rubric = "No Success Criteria"
-        else:
-            rubric = success_criteria.rubric
+        rubric = case.success_criteria.rubric
         if not rubric:
             raise ValueError("Missing Rubric values")
         prompt = self.judge_prompt.format(task = case.task_prompt,rubric = rubric ,transcript = agent_transcript)
-        response = await self.client.messages.create(
-            model = self.model,
-            max_tokens = self.max_tokens,
-            temperature = 0,
-            tools = [VERDICT_TOOL],
-            tool_choice = {"type" : "tool", "name" : "record-verdict"},
-            messages = [{"role":"user","content" : prompt}],
-        )
-        verdict_block = next((block for block in response.content if block.type == 'tool_use'),None)
-        if verdict_block is None:
-            raise ValueError("LLM Judge did not return a verdict tool output")
-        verdict_data = cast(dict[str,Any],verdict_block.input)
-        passed = verdict_data['passed']
-        reasoning = verdict_data['reasoning']
-        confidence = verdict_data['confidence'] 
-        return Verdict(passed = passed, score = confidence, reasoning = reasoning, judge_name = 'LLMJudge', version = self.prompt_version)
+
+        required = {"passed", "reasoning", "confidence"}
+        last = ""
+        # the model occasionally over-reasons and omits a required field even
+        # though the tool call completed (stop_reason=tool_use, not truncation).
+        # a fresh sample usually fixes it — retry a few times before failing so
+        # one flaky verdict doesn't crash a whole batch run.
+        for _ in range(3):
+            response = await self.client.messages.create(
+                model = self.model,
+                max_tokens = self.max_tokens,
+                # NB: temperature is deprecated on the Claude 5 family and rejected
+                # by the API — do not pass it.
+                tools = [VERDICT_TOOL],
+                tool_choice = {"type" : "tool", "name" : "record-verdict"},
+                messages = [{"role":"user","content" : prompt}],
+            )
+            block = next((b for b in response.content if b.type == "tool_use"), None)
+            data = cast("dict[str, Any] | None", block.input if block is not None else None)
+            if isinstance(data, dict) and required <= data.keys():
+                return Verdict(
+                    passed=data["passed"],
+                    score=data["confidence"],
+                    reasoning=data["reasoning"],
+                    judge_name="LLMJudge",
+                    version=self.prompt_version,
+                )
+            last = f"stop_reason={response.stop_reason}, got={data!r}"
+        raise ValueError(f"LLM judge produced no valid verdict after 3 attempts ({last})")
     
 
         

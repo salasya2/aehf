@@ -58,7 +58,7 @@ class StubClient:
 
     async def _create(self, **kwargs: Any) -> SimpleNamespace:
         self.kwargs = kwargs
-        return SimpleNamespace(content=self._blocks)
+        return SimpleNamespace(content=self._blocks, stop_reason="tool_use")
 
 
 def make_judge(client: StubClient, prompt_version: str = "v1") -> LLMJudge:
@@ -101,7 +101,8 @@ async def test_request_is_well_formed() -> None:
 
     # verdict tool is forced, judge can't answer in prose
     assert client.kwargs["tool_choice"]["type"] == "tool"
-    assert client.kwargs["temperature"] == 0
+    # temperature is deprecated on Claude 5 models and must NOT be sent
+    assert "temperature" not in client.kwargs
     # the prompt actually contains the task, the rubric, and the transcript
     prompt = client.kwargs["messages"][0]["content"]
     assert case.task_prompt in prompt
@@ -124,3 +125,16 @@ async def test_missing_rubric_raises() -> None:
     judge = make_judge(StubClient([verdict_block(passed=True)]))
     with pytest.raises(ValueError):
         await judge.score(make_case(rubric=None), make_transcript())
+
+
+async def test_truncated_verdict_raises_clear_error() -> None:
+    # a max_tokens-truncated tool call parses to a partial dict (here missing
+    # 'passed'); must raise a diagnostic, not a cryptic KeyError
+    partial = SimpleNamespace(
+        type="tool_use", id="toolu_1", name="record-verdict",
+        input={"reasoning": "cut off before passed"},  # truncated
+    )
+    judge = make_judge(StubClient([partial]))
+    with pytest.raises(ValueError) as exc:
+        await judge.score(make_case(), make_transcript())
+    assert "no valid verdict" in str(exc.value)

@@ -10,7 +10,9 @@ eval:
           properties:
             expression: {type: string}
     success_criteria:
-      answer_regex: "6"
+      answer_regex: "611"
+      required_tools: [calculator]
+      rubric: "The final answer states 611."
     max_steps: 10
     timeout_seconds: 300
     token_budget: 10000
