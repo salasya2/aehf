@@ -23,7 +23,7 @@ jobs:
 
             - name: Regression diff
               run: |
-                aehf diff "$BASE_SHA" "$HEAD_SHA" --store .aehf  --model "$MODEL" --judge_version v1 --out scorecard.md
+                aehf diff "$BASE_SHA" "$HEAD_SHA" --store .aehf  --model "$MODEL" --judge-version v1 --out scorecard.md
               
               env: 
                 BASE_SHA: ${{ github.event.pull_request.base.sha }}
