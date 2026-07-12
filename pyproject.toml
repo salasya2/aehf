@@ -5,8 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "aehf"
 description = "agent evaluation harness framework"
-version = "2026.7.0"
+version = "0.1.0"
 license = "MIT"
+readme = "README.MD"                    
+authors = [{ name = "Sai Teja Alasyam", email = "salasya2@asu.edu" }]
 license-files = ["LICENSE"]
 requires-python = ">= 3.11"
 dependencies = [
@@ -15,9 +17,12 @@ dependencies = [
     "pyyaml",
     "typer",
     "python-dotenv",
-    "statsmodels",
     
 ]
+[project.urls]
+Homepage = "https://github.com/salasya2/aehf"
+Repository = "https://github.com/salasya2/aehf"
+
 [project.optional-dependencies]
 dev = [
     "ruff",

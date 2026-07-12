@@ -1,0 +1,8 @@
+site_name: aehf
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Calibration findings: calibration.md
+  - Design decisions: decision.md
+  - CI eval gate: eval-gate.md

@@ -1,0 +1,734 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="calibration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>aehf</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aehf-agent-evaluation-harness-framework" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="aehf" class="md-header__button md-logo" aria-label="aehf" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            aehf
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="aehf" class="md-nav__button md-logo" aria-label="aehf" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    aehf
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#headline-finding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headline finding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-everything-is-a-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture — everything is a protocol
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-inside" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's inside
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-findings-in-one-narrative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two findings, in one narrative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope (v0.1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calibration findings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="decision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design decisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eval-gate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI eval gate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#headline-finding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headline finding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-everything-is-a-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture — everything is a protocol
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-inside" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's inside
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-findings-in-one-narrative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two findings, in one narrative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope (v0.1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p><img alt="demo" src="docs/demo.gif" /></p>
+<h1 id="aehf-agent-evaluation-harness-framework">aehf — agent evaluation harness framework</h1>
+<p>A framework-agnostic harness for evaluating tool-using LLM agents: run a suite
+of cases, judge the transcripts, and get <strong>statistically honest</strong> pass rates and
+regression checks — not a single flaky number.</p>
+<p>The point of aehf is not just to score agents, but to <strong>validate the judge doing
+the scoring first</strong>, then use that trusted judge to make claims you can defend.</p>
+<h2 id="headline-finding">Headline finding</h2>
+<p>On 90 hand-labeled agent transcripts:</p>
+<table>
+<thead>
+<tr>
+<th>Judge</th>
+<th>Raw agreement</th>
+<th>Cohen's kappa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AssertionJudge</td>
+<td>97%</td>
+<td><strong>0.000</strong></td>
+</tr>
+<tr>
+<td>LLMJudge (v1)</td>
+<td>97%</td>
+<td><strong>0.894</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Both judges agree with the human ~97% of the time, yet one is worthless and one
+is excellent. Raw agreement doesn't correct for chance given the base rates;
+<strong>Cohen's kappa does.</strong> The assertion judge passes essentially everything, so its
+97% is meaningless (kappa 0); the calibrated LLM judge reaches "almost perfect"
+agreement. This gap is the whole reason the harness measures kappa before
+trusting any downstream number. (Details and caveats: <code>docs/calibration.md</code>.)</p>
+<h2 id="architecture-everything-is-a-protocol">Architecture — everything is a protocol</h2>
+<p>The eval core is decoupled from any provider by three Python <code>Protocol</code>s. The
+runner, judges, and stats know only the interfaces:</p>
+<pre><code class="language-mermaid">                  flowchart TD
+    %% Main Flow
+    EvalCase([EvalCase YAML]) --&gt; Runner
+
+    subgraph ProtocolBlock [Agent &amp; Evaluation Lifecycle]
+        Runner[runner] --&gt; Run[Agent.run case -&gt; Transcript]
+        Adapter[AnthropicAdapter, FakeAgent, ...] -.-&gt;|Configures| Run
+
+        Run --&gt; Tool[ToolProvider.execute]
+        ToolMode[mock / record / replay] -.-&gt;|Modes| Tool
+
+        Tool --&gt; Judge[Judge.score case, transcript]
+        JudgeType[AssertionJudge, LLMJudge] -.-&gt;|Types| Judge
+
+        Judge --&gt; Verdict([Verdict])
+    end
+
+    Verdict --&gt; Stats[stats]
+    Verdict --&gt; Calibration[calibration]
+    Verdict --&gt; Regression[regression]
+
+    %% Labels &amp; Details
+    Stats --&gt; StatsDetails[Wilson, McNemar, n=k]
+    Calibration --&gt; CalDetails[kappa vs human]
+    Regression --&gt; RegDetails[store, diff, CI gate]
+
+    %% Right-side Protocol Tags
+    ProtocolBlock -.-&gt; AgentProto[Agent protocol&lt;br&gt;&lt;i&gt;bring your own: LangChain, raw, ...&lt;/i&gt;]
+    Tool -.-&gt; ToolProto[ToolProvider protocol]
+    Judge -.-&gt; JudgeProto[Judge protocol]
+
+    %% Styling
+    style EvalCase fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style Verdict fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style ProtocolBlock fill:#fff,stroke:#333,stroke-dasharray: 5 5
+</code></pre>
+<p>The agent under test is a black box behind <code>Agent</code>; aehf evaluates whatever
+implements <code>run(case) -&gt; Transcript</code>. The shipped <code>AnthropicAdapter</code> is a
+reference implementation, not the framework.</p>
+<h2 id="whats-inside">What's inside</h2>
+<ul>
+<li><strong>Runner</strong> — async, budget/timeout-enforced, captures agent crashes as failed
+  cases (never harness crashes), bounded concurrency.</li>
+<li><strong>Tools</strong> — mock fixtures, plus record/replay for deterministic offline reruns.</li>
+<li><strong>Judges</strong> — programmatic assertions and a versioned LLM judge with structured
+  (forced-tool) verdicts; calibrated against human labels with Cohen's kappa.</li>
+<li><strong>Stats</strong> — n-sample execution, per-case Wilson confidence intervals, flakiness
+  flags, and McNemar's exact paired test for model/prompt comparison.</li>
+<li><strong>Regression</strong> — results store keyed by (git SHA, model, judge version),
+  <code>aehf diff</code>, a markdown scorecard, and a PR-gate GitHub Action.</li>
+</ul>
+<h2 id="install">Install</h2>
+<pre><code class="language-bash">pip install -e &quot;.[dev]&quot;        # editable, with dev tooling
+</code></pre>
+<p>Set <code>ANTHROPIC_API_KEY</code> (a <code>.env</code> file is loaded automatically) for anything that
+runs a live model. The test suite runs <strong>green without a key</strong> — CI is free and
+offline.</p>
+<h2 id="quickstart">Quickstart</h2>
+<pre><code class="language-bash"># run a suite with mock tools, assertion judge (no API cost for the judge)
+aehf run examples/calibration_suite.yaml anthropic mock --judgechoice assertion
+
+# n-sampled run: per-case pass rate + Wilson CI + flakiness
+aehf run examples/calibration_suite.yaml anthropic mock --n-samples 5
+
+# calibrate a judge against human labels -&gt; Cohen's kappa + disagreements
+aehf calibrate labels/labels_filled.jsonl llm --prompt-version v1
+
+# compare two saved runs with McNemar's test
+aehf compare runA.json runB.json
+
+# regression diff between two stored runs (CI gate)
+aehf diff &lt;base-sha&gt; &lt;head-sha&gt; --store .aehf
+</code></pre>
+<p>Full command list: <code>run</code>, <code>calibrate</code>, <code>export-labels</code>, <code>label</code>, <code>compare</code>,
+<code>diff</code>.</p>
+<h2 id="two-findings-in-one-narrative">Two findings, in one narrative</h2>
+<ol>
+<li><strong>Judge calibration</strong> — assertions kappa=0.00 -&gt; LLM judge kappa=0.894 (n=90).
+   The instrument is validated.</li>
+<li><strong>Model comparison</strong> — using that validated judge, Haiku and Sonnet were
+   <strong>statistically indistinguishable</strong> on the suite (15/18 vs 14/18, McNemar
+   p=1.0). The apparent edge is noise; a single-run comparison would have misled.
+   (<code>docs/calibration.md</code>.)</li>
+</ol>
+<p>Both come with honest caveats stated in the docs (single annotator; a saturated
+suite that can't discriminate the two models). Reporting the null result honestly
+is the point — see <code>docs/decision.md</code> for every design choice and rejected
+alternative.</p>
+<h2 id="scope-v01">Scope (v0.1)</h2>
+<ul>
+<li>Ships an Anthropic reference adapter and judge. The <code>Agent</code>/<code>Judge</code>/<code>ToolProvider</code>
+  protocols make other providers drop-in; a second provider is the planned
+  demonstration of the framework-agnostic claim.</li>
+<li>The CI eval gate compares <strong>committed</strong> baseline runs (golden-file style),
+  because replay pins tool results but not the model. See <code>docs/eval-gate.md</code>.</li>
+<li>Tested: 115 tests, <code>mypy --strict</code> clean, ruff clean.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
